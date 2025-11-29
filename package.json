@@ -1,0 +1,57 @@
+{
+  "name": "@tscodex/mcp-server-example",
+  "version": "0.1.0",
+  "description": "MCP server for news headlines and articles from NewsAPI with @tscodex/mcp-sdk",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "mcp-server-example": "./dist/index.js"
+  },
+  "preferGlobal": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "mcp-sdk",
+    "example",
+    "tutorial",
+    "model-context-protocol",
+    "cursor",
+    "sdk"
+  ],
+  "author": {
+    "name": "unbywyd",
+    "url": "https://github.com/unbywyd"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@tscodex/mcp-sdk": "^0.0.1",
+    "@sinclair/typebox": "^0.34.41"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "example-config.json"
+  ]
+}
+

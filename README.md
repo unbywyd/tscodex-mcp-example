@@ -2,6 +2,38 @@
 
 > **This is an example server for [@tscodex/mcp-sdk](https://www.npmjs.com/package/@tscodex/mcp-sdk)** - TypeScript SDK for creating MCP (Model Context Protocol) servers.
 
+---
+
+## 🎉 Great News! We've Released a VS Code Extension!
+
+**Run this server directly in your editor without manual setup!**
+
+👉 **[MCP Server Manager](https://marketplace.visualstudio.com/items?itemName=unbywyd.tscodex-mcp-manager)** - A VS Code/Cursor extension that simplifies MCP server management.
+
+### Why This is Awesome 🚀
+
+**MCP Server Manager** is a powerful extension that fully automates MCP server operations:
+
+- ✅ **Automatic Configuration** - The extension automatically passes the project path (`MCP_PROJECT_ROOT`) and configuration (`MCP_CONFIG`)
+- ✅ **Secrets Management** - Secure storage and automatic passing of secrets (e.g., `SECRET_NEWSAPI_KEY`) without manually setting environment variables
+- ✅ **Visual Configuration Editor** - Intuitive UI for server configuration based on JSON Schema, no need to manually edit files
+- ✅ **Cursor Integration** - Automatic server registration in Cursor and synchronization on startup
+- ✅ **Lifecycle Management** - Start, stop, and restart servers with a single click
+- ✅ **Smart Package Installation** - Intelligent npm package installation with compatibility checking
+- ✅ **Real-time Monitoring** - Track server status and health in real-time
+- ✅ **Global & Workspace Settings** - Flexible configuration at editor or project level
+
+**No more manual setup needed:**
+- Setting environment variables
+- Creating configuration files
+- Passing project paths
+- Managing secrets
+- Registering servers in Cursor
+
+The extension handles all of this automatically! 🎯
+
+---
+
 MCP server for news headlines and articles from NewsAPI. Provides tools for searching news by topic, getting top headlines by country/category, listing available news sources, and personalized user greetings.
 
 This server integrates with **NewsAPI** (https://newsapi.org/) - a popular free API for news articles. You can get a free API key at https://newsapi.org/register.

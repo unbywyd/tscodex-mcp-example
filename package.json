@@ -1,6 +1,6 @@
 {
   "name": "@tscodex/mcp-server-example",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP server for news headlines and articles from NewsAPI with @tscodex/mcp-sdk",
   "type": "module",
   "main": "./dist/index.js",
@@ -36,8 +36,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@tscodex/mcp-sdk": "^0.0.1",
-    "@sinclair/typebox": "^0.34.41"
+    "@sinclair/typebox": "^0.34.41",
+    "@tscodex/mcp-sdk": "^0.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -54,4 +54,3 @@
     "example-config.json"
   ]
 }
-

@@ -3,4 +3,4 @@ dist/
 *.log
 .env
 .mcp-server-example.json
-
+.cursor

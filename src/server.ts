@@ -6,6 +6,7 @@ import { registerNewsTools } from './tools/news.js';
 import { registerGreetingTools } from './tools/greeting.js';
 import { registerNewsResources } from './tools/news-resources.js';
 import { registerNewsPrompts } from './tools/news-prompts.js';
+import { registerAIDemoTools } from './tools/ai-demo.js';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -91,7 +92,11 @@ export async function createServer() {
         logger.error('Unhandled error:', error);
       }
       return 'An error occurred while processing your request. Please try again.';
-    }
+    },
+
+    // Custom context headers - demonstrate per-request data from workspace settings
+    // MCP Manager UI will show input fields for these in workspace settings
+    contextHeaders: ['project-id', 'environment', 'custom-tag']
   });
 
   // Register tools, resources, and prompts
@@ -100,6 +105,7 @@ export async function createServer() {
   registerNewsTools(server);
   registerNewsResources(server);
   registerNewsPrompts(server);
+  registerAIDemoTools(server);
 
   return { server };
 }

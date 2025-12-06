@@ -82,5 +82,57 @@ export function registerNewsResources(server: McpServer<Config>) {
       }
     }
   });
+
+  // context_info - Demo resource showing context headers received from workspace
+  server.addResource({
+    name: 'context_info',
+    description: 'Shows current request context including workspace ID, project root, and custom context headers configured in MCP Manager',
+    uri: 'context',
+
+    handler: async (uri, context) => {
+      const info = {
+        workspaceId: context.workspaceId || '(not set)',
+        projectRoot: context.projectRoot || '(not set)',
+        contextHeaders: context.contextHeaders || {},
+        timestamp: new Date().toISOString()
+      };
+
+      const headersList = Object.entries(info.contextHeaders)
+        .map(([key, value]) => `  - ${key}: ${value}`)
+        .join('\n') || '  (no context headers configured)';
+
+      const text = `Request Context Information
+===========================
+
+Workspace ID: ${info.workspaceId}
+Project Root: ${info.projectRoot}
+
+Custom Context Headers:
+${headersList}
+
+Timestamp: ${info.timestamp}
+
+---
+This resource demonstrates how context headers flow from
+MCP Manager workspace settings to the server handler.
+
+To configure context headers:
+1. Open MCP Manager
+2. Go to a workspace
+3. Click on this server
+4. Fill in the Context Headers fields (project-id, environment, custom-tag)
+5. Call this resource again to see the values`;
+
+      return {
+        contents: [
+          {
+            uri,
+            mimeType: 'text/plain',
+            text
+          }
+        ]
+      };
+    }
+  });
 }
 

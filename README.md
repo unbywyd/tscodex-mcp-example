@@ -1,99 +1,205 @@
-# MCP News Server
+# @tscodex/mcp-server-example
 
-> **This is an example server for [@tscodex/mcp-sdk](https://www.npmjs.com/package/@tscodex/mcp-sdk)** - TypeScript SDK for creating MCP (Model Context Protocol) servers.
+MCP (Model Context Protocol) server example demonstrating news headlines and articles from NewsAPI. Built with TypeScript and **[@tscodex/mcp-sdk](https://www.npmjs.com/package/@tscodex/mcp-sdk)** for rapid MCP server development.
 
----
-
-## 🎉 Great News! We've Released a VS Code Extension!
-
-**Run this server directly in your editor without manual setup!**
-
-👉 **[MCP Server Manager](https://marketplace.visualstudio.com/items?itemName=unbywyd.tscodex-mcp-manager)** - A VS Code/Cursor extension that simplifies MCP server management.
-
-### Why This is Awesome 🚀
-
-**MCP Server Manager** is a powerful extension that fully automates MCP server operations:
-
-- ✅ **Automatic Configuration** - The extension automatically passes the project path (`MCP_PROJECT_ROOT`) and configuration (`MCP_CONFIG`)
-- ✅ **Secrets Management** - Secure storage and automatic passing of secrets (e.g., `SECRET_NEWSAPI_KEY`) without manually setting environment variables
-- ✅ **Visual Configuration Editor** - Intuitive UI for server configuration based on JSON Schema, no need to manually edit files
-- ✅ **Cursor Integration** - Automatic server registration in Cursor and synchronization on startup
-- ✅ **Lifecycle Management** - Start, stop, and restart servers with a single click
-- ✅ **Smart Package Installation** - Intelligent npm package installation with compatibility checking
-- ✅ **Real-time Monitoring** - Track server status and health in real-time
-- ✅ **Global & Workspace Settings** - Flexible configuration at editor or project level
-
-**No more manual setup needed:**
-- Setting environment variables
-- Creating configuration files
-- Passing project paths
-- Managing secrets
-- Registering servers in Cursor
-
-The extension handles all of this automatically! 🎯
+**Built on [@tscodex/mcp-sdk](https://www.npmjs.com/package/@tscodex/mcp-sdk)** - This project uses the official TSCodex MCP SDK for server infrastructure, authentication, configuration management, and protocol handling.
 
 ---
 
-MCP server for news headlines and articles from NewsAPI. Provides tools for searching news by topic, getting top headlines by country/category, listing available news sources, and personalized user greetings.
+## 🚀 Quick Links
 
-This server integrates with **NewsAPI** (https://newsapi.org/) - a popular free API for news articles. You can get a free API key at https://newsapi.org/register.
+<div align="center">
 
-> **Note:** This project also serves as a reference implementation demonstrating best practices for using `@tscodex/mcp-sdk` to create MCP servers.
+**[📦 MCP Manager](https://github.com/unbywyd/tscodex-mcp-manager-app)** | **[🌉 MCP Bridge](https://github.com/unbywyd/tscodex-mcp-manager-bridge)**
 
-## Features Demonstrated
+Desktop application for managing MCP servers | VS Code/Cursor extension bridge
 
-- ✅ **Configuration Management**: Type-safe config with TypeBox schema
-- ✅ **Tool Registration**: Real-world example with NewsAPI integration
-- ✅ **Resource Registration**: Exposing news sources from NewsAPI
-- ✅ **Prompt Registration**: Template prompts for AI models
-- ✅ **Authentication**: Session-based auth with User role
-- ✅ **User Data**: Using session information (email, fullName) in tools
-- ✅ **Error Handling**: Custom error handlers
-- ✅ **Logging**: Custom logging configuration
-- ✅ **Secrets Management**: Secure access to API keys (SECRET_NEWSAPI_KEY)
+</div>
 
-## Installation
+---
+
+## 🎯 What is This?
+
+This is an **example MCP server** built on the **[@tscodex/mcp-sdk](https://www.npmjs.com/package/@tscodex/mcp-sdk)** that demonstrates best practices for creating MCP servers. It provides news search capabilities using NewsAPI and can work in two ways:
+
+1. **Standalone Mode**: Run directly via `npx` or `npm`, passing environment variables and configuration
+
+2. **Managed Mode**: Use with **[MCP Manager](https://github.com/unbywyd/tscodex-mcp-manager-app)** for workspace isolation, visual configuration, and seamless integration with Cursor
+
+### About TSCodex
+
+**TSCodex** is a project for building tools that work with LLMs. The first tool in this ecosystem is **MCP Manager** - a process manager that:
+
+- **Manages MCP Server Processes**: Controls server lifecycle, monitors health, and handles restarts
+- **Provides Visual Interface**: Beautiful UI built with React Flow to visualize and manage your MCP infrastructure
+- **Enables Workspace Isolation**: Creates workspace proxies so one server can serve multiple Cursor projects
+- **Manages Secrets Securely**: 3-level secret override system (Global → Workspace → Server) with OS keychain storage
+- **Handles Authentication**: Centralized auth management for all servers
+- **AI Agent Integration**: Register OpenAI-compatible APIs and proxy them to servers without exposing keys
+- **Dynamic MCP Tools**: Create tools and resources dynamically through a special MCP server with AI-powered form generation
+
+The **[@tscodex/mcp-sdk](https://www.npmjs.com/package/@tscodex/mcp-sdk)** is the foundation - a fast, type-safe SDK for building HTTP-based MCP servers. It doesn't require MCP Manager and can run standalone, but MCP Manager adds powerful management capabilities on top.
+
+### Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Cursor (IDE Editor)                      │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │         MCP Manager Bridge Extension                  │  │
+│  │  - Auto-registers workspace                           │  │
+│  │  - Syncs with MCP Manager                             │  │
+│  │  - Updates Cursor mcp.json                            │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                         │                                    │
+│              HTTP API + WebSocket                            │
+│                         │                                    │
+└─────────────────────────┼────────────────────────────────────┘
+                          │
+┌─────────────────────────┼────────────────────────────────────┐
+│              MCP Manager (Desktop App)                        │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │  - Process Management                                  │  │
+│  │  - Workspace Isolation (Proxy)                        │  │
+│  │  - Visual Configuration UI                            │  │
+│  │  - Secrets Management (3-level override)              │  │
+│  │  - Permissions System                                 │  │
+│  │  - AI Agent Proxy                                     │  │
+│  │  - MCP Tools (Dynamic Server)                         │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                         │                                    │
+│         ┌────────────────┴────────────────┐                  │
+│         │                                 │                  │
+│  ┌──────▼──────┐                  ┌──────▼──────┐          │
+│  │ MCP Tools   │                  │ MCP Servers │          │
+│  │ (Dynamic)   │                  │ (e.g. this) │          │
+│  └──────┬──────┘                  └──────┬──────┘          │
+│         │                                 │                  │
+└─────────┼─────────────────────────────────┼──────────────────┘
+          │                                 │
+          └────────────┬────────────────────┘
+                       │
+          ┌────────────▼────────────┐
+          │  @tscodex/mcp-sdk       │
+          │  (Core SDK)              │
+          └─────────────────────────┘
+```
+
+### How It Works
+
+**The Problem**: Real projects require each Cursor workspace to work with its own workspace context. For example, a news server might need the root path of the current project to save articles or cache data. But you can't run a separate server instance for each project.
+
+**The Solution**: **[MCP Manager](https://github.com/unbywyd/tscodex-mcp-manager-app)** allows you to:
+
+- Run **one server instance** (e.g., `@tscodex/mcp-server-example`)
+- Create **multiple workspace proxies** that forward requests with workspace context
+- The SDK receives headers from the current workspace and allows one server to work with different workspaces
+
+**The Bridge**: **[MCP Manager Bridge](https://github.com/unbywyd/tscodex-mcp-manager-bridge)** automatically:
+
+- Registers the workspace in MCP Manager by project path
+- Syncs Cursor with the manager
+- Registers proxy MCP servers in local `mcp.json`
+- Provides perfect encapsulation and connection between workspaces
+
+---
+
+## 🎨 Features
+
+- 📰 **News Search**: Search news by topic, get top headlines by country/category
+- 🌍 **News Sources**: List available news sources from NewsAPI
+- 👋 **Personalized Greetings**: Greet users using session information
+- 🤖 **AI Integration**: Example tools demonstrating AI Agent integration
+- 📝 **Prompt Templates**: Pre-built prompt templates for common tasks
+- 🔒 **Authentication**: Session-based authentication with role support
+- ⚙️ **Type-Safe Config**: JSON Schema-based configuration with TypeBox
+- 🔐 **Secrets Management**: Secure API key handling via `SECRET_*` prefix
+
+---
+
+## 📦 Installation
+
+### Option 1: Standalone (via npx)
 
 ```bash
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-
-# Run in development mode
-npm run dev
-
-# Run in production mode
-npm start
+npx @tscodex/mcp-server-example@latest
 ```
 
-## Project Structure
+### Option 2: Global Installation
 
-```
-mcp-server-example/
-├── src/
-│   ├── config.ts          # Configuration schema definition
-│   ├── config-loader.ts   # Configuration loading logic
-│   ├── server.ts          # Server creation and configuration
-│   ├── index.ts           # Main entry point
-│   ├── utils.ts           # Utility functions (error sanitization)
-│   └── tools/
-│       ├── greeting.ts    # Greeting tools
-│       ├── news.ts        # News API tools
-│       ├── news-resources.ts  # News resources
-│       └── news-prompts.ts    # News prompts
-├── package.json
-├── tsconfig.json
-├── example-config.json    # Example configuration file
-└── README.md
+```bash
+npm install -g @tscodex/mcp-server-example
 ```
 
-## Configuration
+### Option 3: Managed Mode (Recommended)
+
+Use with **[MCP Manager](https://github.com/unbywyd/tscodex-mcp-manager-app)** for the best experience:
+
+1. **Install MCP Manager**: Download from [GitHub Releases](https://github.com/unbywyd/tscodex-mcp-manager-app/releases)
+
+2. **Install Bridge Extension**: [MCP Manager Bridge](https://marketplace.visualstudio.com/items?itemName=unbywyd.mcp-manager-bridge) from VS Code Marketplace
+
+3. **Add Server**: In MCP Manager, add `@tscodex/mcp-server-example` as a new server
+
+4. **Configure**: Use the visual UI to configure the server (JSON Schema-based)
+
+5. **Enable**: Enable the server for your workspace in Cursor
+
+**Benefits of Managed Mode:**
+
+- ✅ **Visual Configuration**: No need to edit JSON files manually
+- ✅ **Workspace Isolation**: Each project gets its own workspace proxy
+- ✅ **Secure Secrets**: 3-level secret override (Global → Workspace → Server)
+- ✅ **Permissions Control**: Granular control over what each server can access
+- ✅ **AI Agent Integration**: Use AI agents without exposing API keys to servers
+- ✅ **Token Statistics**: Track AI usage transparently
+- ✅ **Auto-sync**: Bridge automatically syncs with Cursor
+
+---
+
+## 🚀 Quick Start
+
+### Standalone Mode
+
+```bash
+# Start server with default settings
+npx @tscodex/mcp-server-example@latest
+
+# Server will start on port 3000 by default (host: 0.0.0.0)
+# MCP endpoint: http://localhost:3000/mcp
+
+# With custom host and port
+npx @tscodex/mcp-server-example@latest --host 127.0.0.1 --port 3000
+
+# With project root (REQUIRED for standalone mode)
+npx @tscodex/mcp-server-example@latest --host 127.0.0.1 --port 3000 --root /path/to/project
+
+# Get server metadata (for MCP Manager integration)
+npx @tscodex/mcp-server-example@latest --meta
+```
+
+### Managed Mode
+
+1. **Start MCP Manager** desktop application
+
+2. **Open Cursor** with your project
+
+3. **Bridge Extension** automatically:
+   - Registers your workspace
+   - Connects to MCP Manager
+   - Syncs enabled servers to Cursor's `mcp.json`
+
+4. **Enable Server**: Click the play icon on `@tscodex/mcp-server-example` in the Bridge panel
+
+5. **Configure**: Use MCP Manager UI to configure the server (if needed)
+
+---
+
+## ⚙️ Configuration
 
 ### Configuration File
 
-Create a `.mcp-server-example.json` file in your project root (or use `example-config.json` as a template):
+Create `.mcp-server-example.json` in your project root:
 
 ```json
 {
@@ -101,6 +207,11 @@ Create a `.mcp-server-example.json` file in your project root (or use `example-c
   "maxItems": 10
 }
 ```
+
+**Configuration Options:**
+
+- `greeting` (string, optional, default: `"Hello"`): Default greeting message
+- `maxItems` (number, optional, default: `10`): Maximum number of news items to return (1-100)
 
 ### Configuration Sources
 
@@ -112,163 +223,195 @@ SDK loads configuration from multiple sources with the following priority:
 4. **Config File** (`.mcp-server-example.json`)
 5. **Schema Defaults** - Lowest priority
 
-### Override Config File Path
+### Secrets Management
 
-You can specify a custom config file path via CLI:
+**⚠️ Security Note:** API keys are stored as **secrets** (environment variables with `SECRET_` prefix) instead of in configuration files.
 
-```bash
-node dist/index.js --config ./custom-config.json
-```
-
-## Environment Variables
-
-### Server Settings (Automatically Read by SDK)
-
-- `MCP_HOST` - Server host (default: `0.0.0.0`)
-- `MCP_PORT` - Server port (default: `3000`)
-- `MCP_PROJECT_ROOT` - Project root directory
-- `MCP_CONFIG` - Extension configuration (JSON string)
-- `MCP_AUTH_TOKEN` - Authentication token (if auth is enabled)
-
-### Secrets (Automatically Extracted by SDK)
-
-Secrets are environment variables prefixed with `SECRET_`:
-
-- `SECRET_NEWSAPI_KEY` - **Required**: NewsAPI key (get free key at https://newsapi.org/register)
-
-**Important**: Secrets are automatically filtered from configuration and never exposed in logs or responses.
-
-**Get your NewsAPI key:**
-1. Visit https://newsapi.org/register
-2. Sign up for free account
-3. Copy your API key
-4. Set it as environment variable: `SECRET_NEWSAPI_KEY=your_api_key_here`
-
-### Custom Configuration
-
-You can set any config field via environment variable:
+**In Standalone Mode:**
 
 ```bash
-# Set greeting via ENV (converted to camelCase automatically)
-GREETING="Hi there" npm run dev
-
-# Set maxItems
-MAX_ITEMS=20 npm run dev
+export SECRET_NEWSAPI_KEY=your_newsapi_key
 ```
 
-## Usage Examples
+**In Managed Mode:**
 
-### Basic Server
+MCP Manager provides a **3-level secret override system**:
 
-```bash
-# Start server (reads config from .mcp-server-example.json)
-npm run dev
-```
+1. **Global**: Secrets available to all servers
+2. **Workspace**: Secrets specific to a workspace
+3. **Server**: Secrets specific to a server instance
 
-### With Custom Config
+This allows fine-grained control over what secrets each server can access.
 
-```bash
-# Use custom config file
-npm run dev -- --config ./my-config.json
+**Get API Keys:**
 
-# Override specific values via CLI
-npm run dev -- --greeting "Hi" --maxItems 20
-```
+- **NewsAPI**: https://newsapi.org/register (Free tier available)
 
-### With Environment Variables
+---
 
-```bash
-# Set via ENV
-GREETING="Hello World" MAX_ITEMS=50 npm run dev
-```
+## 🔒 Security & Permissions
 
-### With NewsAPI Key
+### Security Features
 
-```bash
-# Set NewsAPI key (required for news tools)
-# Get your free key at: https://newsapi.org/register
-SECRET_NEWSAPI_KEY="your-newsapi-key" npm run dev
-```
+**MCP Manager** provides enterprise-grade security:
 
-## Tools
+1. **OS Keychain Storage**: Secrets are stored in the operating system's secure keychain (Windows Credential Manager, macOS Keychain, Linux Secret Service)
 
-This example server includes the following tools:
+2. **No Key Exposure**: API keys are never passed directly to MCP servers. Servers that need AI access use the AI Agent proxy mechanism
 
-### `greet`
+3. **Process Isolation**: Each server runs in its own process with isolated environment
 
-Greet the current user using their session information (email, fullName).
+4. **Permission System**: Granular control over what each server can access
 
-**Arguments:**
-- `formal` (boolean, optional): Use formal greeting style (default: false)
+5. **Workspace Scoping**: File system access is always scoped to the project root - servers cannot access files outside the workspace
 
-**Example:**
+### Permissions System
+
+MCP Manager's permission system allows you to configure:
+
+- **Environment Variables**: Which environment variables are available to the server
+- **Secrets Access**: Which secrets the server can access (3-level override: Global → Workspace → Server)
+- **AI Agent Access**: Whether the server can use the AI Agent proxy, and which models are allowed
+- **File System Access**: Workspace root access (always scoped to project, cannot access parent directories)
+
+**Example Permission Configuration:**
+
 ```json
 {
-  "name": "greet",
-  "arguments": {
-    "formal": false
+  "envVars": ["NODE_ENV", "DEBUG"],
+  "secrets": ["SECRET_NEWSAPI_KEY"],
+  "aiAgent": {
+    "enabled": true,
+    "allowedModels": ["gpt-4", "gpt-3.5-turbo"]
   }
 }
 ```
 
-**Note**: Uses user's `fullName` from session if available, otherwise uses email username. Requires valid session.
+### MCP Manager Key Features
 
-### `get_news`
+**MCP Manager** is a comprehensive desktop application that provides:
 
-Get news headlines from NewsAPI. Supports top headlines by country/category or search by query.
+#### 1. **Visual Server Management**
+- Beautiful React Flow-based interface to visualize your MCP infrastructure
+- See all servers, workspaces, and their connections at a glance
+- Drag-and-drop interface for managing server configurations
 
-**Arguments:**
-- `query` (string, optional): Search query (e.g., "bitcoin", "technology"). If not provided, returns top headlines
-- `country` (string, optional): ISO 3166-1 alpha-2 country code (e.g., "us", "gb", "ru"). Only for top headlines
-- `category` (string, optional): News category - one of: business, entertainment, general, health, science, sports, technology. Only for top headlines
-- `pageSize` (number, optional): Number of articles to return (1-100, default: 10)
+#### 2. **Server Discovery & Metadata**
+- Automatically discovers tools, resources, and prompts from MCP servers
+- Displays JSON Schema for server configuration
+- Visual configuration editor based on schema - no manual JSON editing needed
 
-**Examples:**
+#### 3. **Workspace Isolation**
+- Create workspace proxies for each Cursor project
+- One server instance can serve multiple workspaces
+- Each workspace gets its own isolated context and project root
+- SDK automatically receives workspace headers and adapts behavior
 
-Get top headlines for US:
-```json
-{
-  "name": "get_news",
-  "arguments": {
-    "country": "us",
-    "pageSize": 5
-  }
-}
+#### 4. **3-Level Secret Override System**
 ```
-
-Search for news about a topic:
-```json
-{
-  "name": "get_news",
-  "arguments": {
-    "query": "artificial intelligence",
-    "pageSize": 10
-  }
-}
+Global Secrets (All Servers)
+    ↓
+Workspace Secrets (All Servers in Workspace)
+    ↓
+Server-Specific Secrets (Only This Server)
 ```
+- Fine-grained control over secret access
+- Secrets stored securely in OS keychain
+- Never exposed in logs or configuration files
 
-Get technology news:
-```json
-{
-  "name": "get_news",
-  "arguments": {
-    "category": "technology",
-    "country": "us"
-  }
-}
-```
+#### 5. **AI Agent Proxy**
+- Register OpenAI-compatible APIs (any baseUrl + API key)
+- Proxy AI requests to servers without exposing keys
+- Track token usage transparently
+- Permission-based access control per server
+- Cost monitoring and statistics
 
-**Note**: Requires `SECRET_NEWSAPI_KEY` environment variable. Get free key at https://newsapi.org/register
+#### 6. **Dynamic MCP Tools Server**
+- Special MCP server that allows dynamic creation of tools and resources
+- AI-powered form generation - describe what you need, AI fills the form
+- Perfect for rapid prototyping and custom tool creation
+- Integration with AI Agent for intelligent tool generation
 
-## Resources
+#### 7. **Process Management**
+- Start, stop, restart servers with one click
+- Health monitoring and automatic recovery
+- Real-time logs and status updates
+- Resource usage tracking
+
+#### 8. **Cursor Integration via Bridge**
+- Automatic workspace registration by project path
+- Real-time synchronization between Cursor and MCP Manager
+- Automatic `mcp.json` updates in Cursor
+- Seamless enable/disable of servers per workspace
+
+---
+
+## 🤖 AI Agent Integration
+
+MCP Manager includes a built-in **AI Agent** that:
+
+1. **Registers OpenAI-compatible APIs**: Configure via `baseUrl` and API key
+2. **Provides Proxy**: Servers can use AI without direct API key access
+3. **Token Statistics**: Track all AI usage transparently
+4. **Permission-Based**: Each server must have AI Agent access enabled in permissions
+
+**How It Works:**
+
+1. **Register AI Provider** in MCP Manager:
+   - Base URL: `https://api.openai.com/v1`
+   - API Key: (stored securely in OS keychain)
+   - Model: `gpt-4`, `gpt-3.5-turbo`, etc.
+
+2. **Enable for Server**: In server permissions, enable AI Agent access
+
+3. **Use in Server**: The SDK provides methods to access the AI Agent:
+
+   ```typescript
+   const aiResponse = await server.getAiAgent().chat({
+     model: 'gpt-4',
+     messages: [{ role: 'user', content: 'Generate news summary' }]
+   });
+   ```
+
+4. **Track Usage**: All token usage is tracked and displayed in MCP Manager
+
+**Benefits:**
+
+- ✅ No API keys exposed to servers
+- ✅ Centralized AI usage tracking
+- ✅ Easy to switch AI providers
+- ✅ Cost monitoring
+
+---
+
+## 🛠️ Available Tools
+
+### News Tools
+
+- `get_news` - Get news headlines from NewsAPI. Supports top headlines by country/category or search by query
+  - Arguments: `query` (optional), `country` (optional), `category` (optional), `pageSize` (optional, 1-100, default: 10)
+
+### Greeting Tools
+
+- `greet` - Greet the current user using their session information (email, fullName)
+  - Arguments: `formal` (boolean, optional): Use formal greeting style (default: false)
+
+### AI Demo Tools
+
+- `ai_demo_chat` - Example tool demonstrating AI Agent integration
+  - Shows how to use the AI Agent proxy from MCP Manager
+
+---
+
+## 📚 Resources
 
 ### `newsapi://sources`
 
-Returns list of available news sources from NewsAPI.
+Returns list of available news sources from NewsAPI with their categories, countries, and languages.
 
-**Note**: Requires `SECRET_NEWSAPI_KEY` environment variable. Returns list of sources with their categories, countries, and languages.
+---
 
-## Prompts
+## 📝 Prompts
 
 ### `get_news_about`
 
@@ -277,209 +420,183 @@ Template for getting news about a specific topic.
 **Arguments:**
 - `topic` (string, required): Topic to search news for (e.g., "artificial intelligence", "climate change")
 
-**Example:**
-```json
-{
-  "name": "get_news_about",
-  "arguments": {
-    "topic": "artificial intelligence"
-  }
-}
-```
-
 ### `greet_current_user`
 
-Template for greeting the current logged-in user.
+Template for greeting the current logged-in user. Uses session data automatically.
 
-**Arguments:** None (uses session data automatically)
+---
 
-**Example:**
-```json
-{
-  "name": "greet_current_user",
-  "arguments": {}
-}
+## 📚 Example Usage
+
+### Example 1: Get Top Headlines
+
+```bash
+# Tool: get_news
+# Country: us
+# Category: technology
+# Page Size: 5
 ```
 
-## Code Walkthrough
+### Example 2: Search News
 
-### 1. Configuration Schema (`src/config.ts`)
-
-Defines TypeBox schema for type-safe configuration:
-
-```typescript
-const ConfigSchema = Type.Object({
-  greeting: Type.Optional(Type.String({
-    default: 'Hello',
-    description: 'Default greeting message'
-  })),
-  // ... more fields
-});
-
-export type Config = Static<typeof ConfigSchema>;
+```bash
+# Tool: get_news
+# Query: "artificial intelligence"
+# Page Size: 10
 ```
 
-### 2. Server Creation (`src/index.ts`)
+### Example 3: Greet User
 
-Main server setup with all features:
-
-```typescript
-const server = new McpServer<Config, Roles, Session>({
-  name: 'mcp-server-example',
-  version: '0.1.0',
-  configSchema: ConfigSchemaExport,
-  configFile: '.mcp-server-example.json',
-  // ... more options
-});
+```bash
+# Tool: greet
+# Formal: false
 ```
 
-### 3. Tool Registration
+---
 
-Register tools with type-safe handlers:
+## 🔧 Environment Variables
 
-```typescript
-server.tool({
-  name: 'greet',
-  description: 'Greet a user',
-  arguments: Type.Object({
-    name: Type.String({ description: 'Name to greet' })
-  }),
-  handler: async (args, context) => {
-    // Access config, projectRoot, secrets, session
-    const config = context.config;
-    // ... handler logic
-  }
-});
+All environment variables are optional with sensible defaults:
+
+```bash
+# Server settings
+MCP_PORT=3000              # Server port (default: 3000)
+MCP_HOST=0.0.0.0          # Server host (default: 0.0.0.0)
+MCP_PATH=/mcp             # MCP endpoint path (default: /mcp)
+MCP_PROJECT_ROOT=/path     # Project root directory
+
+# Configuration (alternative to config file)
+GREETING=Hello
+MAX_ITEMS=10
+
+# API Keys (required for news tools)
+SECRET_NEWSAPI_KEY=your_key
 ```
 
-### 4. Resource Registration
+---
 
-Expose read-only data:
+## 🏗️ Built on @tscodex/mcp-sdk
 
-```typescript
-server.resource({
-  name: 'config',
-  description: 'Current server configuration',
-  uri: 'config://current',
-  handler: async (uri, context) => {
-    // Return resource content
-  }
-});
+This project is built on top of **[@tscodex/mcp-sdk](https://www.npmjs.com/package/@tscodex/mcp-sdk)**, which provides:
+
+- ✅ **MCP Server Infrastructure**: HTTP transport, protocol handling, request routing
+- ✅ **Authentication & Session Management**: Secure session handling
+- ✅ **Configuration Loading**: CLI args, env vars, config files with priority system
+- ✅ **Secrets Management**: `SECRET_*` environment variable handling
+- ✅ **Workspace Context**: Automatic workspace root detection and header handling
+- ✅ **AI Agent Integration**: Built-in support for AI Agent proxy
+- ✅ **Type Safety**: Full TypeScript support with TypeBox schemas
+
+**Key Features of the SDK:**
+
+- Fast HTTP-based MCP server creation
+- No database required - stateless design
+- Works with or without MCP Manager
+- Automatic workspace context from headers
+- JSON Schema-based configuration
+
+---
+
+## 🧪 Development
+
+```bash
+# Clone repository
+git clone https://github.com/unbywyd/tscodex-mcp-server-example.git
+cd tscodex-mcp-server-example
+
+# Install dependencies
+npm install
+
+# Build
+npm run build
+
+# Run in development mode
+npm run dev
+
+# Run production build
+npm start
+
+# Get metadata (for MCP Manager)
+npm run meta
 ```
 
-### 5. Prompt Registration
+---
 
-Create template prompts:
+## 📁 Project Structure
 
-```typescript
-server.prompt({
-  name: 'greet_user',
-  description: 'Template for greeting',
-  arguments: Type.Object({
-    userName: Type.String()
-  }),
-  handler: async (args, context) => {
-    // Return prompt messages
-  }
-});
+```
+mcp-server-example/
+├── src/
+│   ├── index.ts              # Entry point
+│   ├── server.ts             # Server setup
+│   ├── config.ts             # Configuration schema
+│   ├── config-loader.ts      # Config loading logic
+│   ├── utils.ts              # Utility functions
+│   └── tools/                # MCP tools
+│       ├── greeting.ts       # Greeting tools
+│       ├── news.ts           # News API tools
+│       ├── news-resources.ts # News resources
+│       ├── news-prompts.ts   # News prompts
+│       └── ai-demo.ts        # AI demo tools
+├── dist/                     # Compiled JavaScript
+├── package.json
+├── tsconfig.json
+├── example-config.json       # Example configuration
+└── README.md
 ```
 
-## Context Object
+---
 
-All handlers receive a `context` object with:
+## 📋 Requirements
 
-- `config`: Your configuration object (type-safe)
-- `projectRoot`: Project root directory (from `MCP_PROJECT_ROOT`)
-- `secrets`: Map of `SECRET_*` environment variables
-- `session`: User session (if auth is enabled)
-- `logger`: Logger instance
+- Node.js >= 18.0.0
+- NewsAPI key (optional, but required for news tools) - Get free key at https://newsapi.org/register
 
-## Authentication
+---
 
-### Session Schema
+## 🖥️ Platform Support
 
-Define what user data is available:
+**Windows**: ✅ Fully supported - Pre-built binaries available with code signing
 
-```typescript
-const SessionSchema = Type.Object({
-  email: Type.String(),
-  fullName: Type.Optional(Type.String())
-});
-```
+**macOS**: ⚠️ Requires code signing - The project is built for Windows primarily. macOS requires code signing for distribution. Developers can build and sign their own binaries using the available resources in the repository. **If you'd like to collaborate on macOS support or have code signing capabilities, please contact the author.**
 
-### Load Session
+**Linux**: ✅ Fully supported - Pre-built binaries available
 
-Extract session from auth token:
+> **Note**: MCP Manager is currently built primarily for Windows. macOS support requires code signing certificates. All source code and build resources are available in the repository for developers who want to build and sign their own macOS binaries. If you're interested in collaborating on macOS support, please reach out!
 
-```typescript
-loadSession: async (token: string, context) => {
-  const tokenData = JSON.parse(token);
-  return {
-    email: tokenData.email,
-    fullName: tokenData.fullName
-  };
-}
-```
+---
 
-### Role-Based Access
+## 🔗 Related Projects
 
-Define roles and restrict tool access:
+- **[MCP Manager](https://github.com/unbywyd/tscodex-mcp-manager-app)** - Desktop application for MCP server management
+- **[MCP Manager Bridge](https://github.com/unbywyd/tscodex-mcp-manager-bridge)** - VS Code/Cursor extension bridge
+- **[@tscodex/mcp-sdk](https://www.npmjs.com/package/@tscodex/mcp-sdk)** - SDK for building MCP servers
+- **[@tscodex/mcp-images](https://github.com/unbywyd/tscodex-mcp-images)** - Image processing MCP server
+- **[MCP Server Example (this project)](https://github.com/unbywyd/tscodex-mcp-server-example)** - Example MCP server
 
-```typescript
-roles: {
-  User: async (session) => !!session.email,
-  Admin: async (session) => session.email?.endsWith('@admin.com')
-}
-```
+---
 
-## Error Handling
-
-Custom error handler for unhandled errors:
-
-```typescript
-server.onError((error, context) => {
-  context.logger?.error('Error:', error);
-  return {
-    content: [{ type: 'text', text: 'An error occurred' }],
-    isError: true
-  };
-});
-```
-
-## Security Best Practices
-
-1. **Path Validation**: Always validate paths relative to project root
-2. **Secrets**: Never expose secrets in logs or responses
-3. **Input Validation**: Use TypeBox schemas for all inputs
-4. **Error Messages**: Don't expose internal error details to clients
-5. **Role-Based Access**: Use roles to restrict sensitive operations
-
-## Extension Integration
-
-When used with Cursor Extension:
-
-1. Extension automatically sets `MCP_HOST`, `MCP_PORT`, `MCP_PROJECT_ROOT`
-2. Extension can pass configuration via `MCP_CONFIG`
-3. Extension can pass auth token via `MCP_AUTH_TOKEN`
-4. Server automatically exposes Extension endpoints (`/health`, `/config`, etc.)
-
-## Development Tips
-
-1. **Type Safety**: Use TypeScript types extracted from schemas
-2. **Default Values**: Define defaults in schema, not in code
-3. **Logging**: Use context.logger for consistent logging
-4. **Error Handling**: Always return proper error responses
-5. **Testing**: Test tools with different configurations and contexts
-
-## Next Steps
-
-1. **Add More Tools**: Implement your own tools for your use case
-2. **Add Resources**: Expose project files, documentation, etc.
-3. **Add Prompts**: Create helpful prompt templates
-4. **Customize Auth**: Implement your authentication logic
-5. **Add Validation**: Add business logic validation in `loadConfig`
-
-## License
+## 📄 License
 
 MIT
 
+---
+
+## 👤 Author
+
+[unbywyd](https://github.com/unbywyd)
+
+**Website**: [tscodex.com](https://tscodex.com)
+
+---
+
+## 🔗 Links
+
+- **Website**: https://tscodex.com
+- **GitHub**: https://github.com/unbywyd/tscodex-mcp-server-example
+- **NPM**: https://www.npmjs.com/package/@tscodex/mcp-server-example
+- **Issues**: https://github.com/unbywyd/tscodex-mcp-server-example/issues
+- **MCP SDK**: https://www.npmjs.com/package/@tscodex/mcp-sdk
+- **MCP SDK GitHub**: https://github.com/unbywyd/tscodex-mcp-sdk
+- **MCP Manager**: https://github.com/unbywyd/tscodex-mcp-manager-app
+- **MCP Bridge**: https://github.com/unbywyd/tscodex-mcp-manager-bridge
